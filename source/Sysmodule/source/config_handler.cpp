@@ -2,7 +2,6 @@
 #include "config_handler.h"
 #include "Controllers.h"
 #include "ControllerConfig.h"
-#include "log.h"
 #include "ini.h"
 #include <cstring>
 #include <stratosphere.hpp>
@@ -181,13 +180,11 @@ namespace syscon::config
 
         void ConfigChangedCheckThreadFunc(void *arg)
         {
-            WriteToLog("Starting config check thread!");
             do {
                 if (R_SUCCEEDED(waitSingle(filecheckTimerWaiter, 0)))
                 {
                     if (config::CheckForFileChanges())
                     {
-                        WriteToLog("File check succeeded! Loading configs...");
                         config::LoadAllConfigs();
                         usb::ReloadDualshock4Event();
                     }
@@ -207,38 +204,26 @@ namespace syscon::config
         {
             LoadGlobalConfig(tempGlobalConfig);
         }
-        else
-            WriteToLog("Failed to read from global config!");
 
         if (R_SUCCEEDED(ReadFromConfig(XBOXCONFIG)))
         {
             XboxController::LoadConfig(&tempConfig);
         }
-        else
-            WriteToLog("Failed to read from xbox orig config!");
 
         if (R_SUCCEEDED(ReadFromConfig(XBOXONECONFIG)))
             XboxOneController::LoadConfig(&tempConfig);
-        else
-            WriteToLog("Failed to read from xbox one config!");
 
         if (R_SUCCEEDED(ReadFromConfig(XBOX360CONFIG)))
         {
             Xbox360Controller::LoadConfig(&tempConfig);
             Xbox360WirelessController::LoadConfig(&tempConfig);
         }
-        else
-            WriteToLog("Failed to read from xbox 360 config!");
 
         if (R_SUCCEEDED(ReadFromConfig(DUALSHOCK3CONFIG)))
             Dualshock3Controller::LoadConfig(&tempConfig);
-        else
-            WriteToLog("Failed to read from dualshock 3 config!");
 
         if (R_SUCCEEDED(ReadFromConfig(DUALSHOCK4CONFIG)))
             Dualshock4Controller::LoadConfig(&tempConfig, tempColor);
-        else
-            WriteToLog("Failed to read from dualshock 4 config!");
     }
 
     bool CheckForFileChanges()
@@ -306,7 +291,6 @@ namespace syscon::config
 
     Result Initialize()
     {
-        DiscardOldLogs();
         config::LoadAllConfigs();
         config::CheckForFileChanges();
         utimerCreate(&filecheckTimer, 1e+9L, TimerType_Repeating);

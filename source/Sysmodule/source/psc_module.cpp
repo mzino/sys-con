@@ -3,7 +3,6 @@
 #include "usb_module.h"
 #include "config_handler.h"
 #include "controller_handler.h"
-#include "log.h"
 
 namespace syscon::psc
 {
