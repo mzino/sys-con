@@ -6,14 +6,14 @@
 #include "config_handler.h"
 #include "psc_module.h"
 
-#define APP_VERSION "0.6.0"
+#define APP_VERSION "0.6.1"
 
 // libnx fake heap initialization
 extern "C"
 {
     u32 __nx_applet_type = AppletType_None;
 
-    #define INNER_HEAP_SIZE 0x40'000
+#define INNER_HEAP_SIZE 0x40'000
     size_t nx_inner_heap_size = INNER_HEAP_SIZE;
     char nx_inner_heap[INNER_HEAP_SIZE];
 
@@ -37,17 +37,18 @@ extern "C"
 }
 
 // libstratosphere variables
-namespace ams 
+namespace ams
 {
     ncm::ProgramId CurrentProgramId = {0x690000000000000D};
-    namespace result { bool CallFatalOnResultAssertion = true; }
-}
-
+    namespace result
+    {
+        bool CallFatalOnResultAssertion = true;
+    }
+} // namespace ams
 
 extern "C" void __appInit(void)
 {
-    ams::sm::DoWithSession([] 
-    {
+    ams::sm::DoWithSession([] {
         //Initialize system firmware version
         R_ABORT_UNLESS(setsysInitialize());
         SetSysFirmwareVersion fw;
@@ -57,7 +58,7 @@ extern "C" void __appInit(void)
 
         R_ABORT_UNLESS(timeInitialize());
         R_ABORT_UNLESS(hiddbgInitialize());
-        if (hosversionAtLeast(7,0,0))
+        if (hosversionAtLeast(7, 0, 0))
             R_ABORT_UNLESS(hiddbgAttachHdlsWorkBuffer());
         R_ABORT_UNLESS(usbHsInitialize());
         R_ABORT_UNLESS(pscmInitialize());

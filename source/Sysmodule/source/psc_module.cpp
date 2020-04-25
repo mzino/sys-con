@@ -20,7 +20,8 @@ namespace syscon::psc
 
         void PscThreadFunc(void *arg)
         {
-            do {
+            do
+            {
                 if (R_SUCCEEDED(waitSingle(pscModuleWaiter, UINT64_MAX)))
                 {
                     PscPmState pscState;
@@ -30,11 +31,11 @@ namespace syscon::psc
                         switch (pscState)
                         {
                             case PscPmState_ReadyAwaken:
-                                usb::CreateUsbEvents();
+                                //usb::CreateUsbEvents();
                                 break;
                             case PscPmState_ReadySleep:
                             case PscPmState_ReadyShutdown:
-                                usb::DestroyUsbEvents();
+                                //usb::DestroyUsbEvents();
                                 controllers::Reset();
                                 break;
                             default:
@@ -45,7 +46,7 @@ namespace syscon::psc
                 }
             } while (is_psc_thread_running);
         }
-    }
+    } // namespace
     Result Initialize()
     {
         R_TRY(pscmGetPmModule(&pscModule, PscPmModuleId(126), dependencies, sizeof(dependencies) / sizeof(uint16_t), true));
@@ -65,4 +66,4 @@ namespace syscon::psc
         g_psc_thread.CancelSynchronization();
         g_psc_thread.Join();
     }
-};
+}; // namespace syscon::psc
