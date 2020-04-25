@@ -72,44 +72,16 @@ namespace syscon::usb
             {
                 if (R_SUCCEEDED(eventWait(&g_usbSonyEvent, UINT64_MAX)))
                 {
-<<<<<<< HEAD
-=======
-                    WriteToLog("Sony event went off");
->>>>>>> 99520c55e6c435c7aa4b73e270577b6c6eff8445
 
                     std::scoped_lock usbLock(usbMutex);
                     if (!controllers::IsAtControllerLimit())
                     {
                         s32 total_entries;
-<<<<<<< HEAD
-                        if ((QueryVendorProduct(VENDOR_SONY, PRODUCT_DUALSHOCK3) != 0)
-                        && (total_entries = QueryInterfaces(USB_CLASS_HID, 0, 0)) != 0)
-                            controllers::Insert(std::make_unique<Dualshock3Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries)));
-                    }
-                }
-            } while (is_usb_event_thread_running);
-        }
-
-        void UsbDs4EventThreadFunc(void *arg)
-        {
-            do {
-                if (R_SUCCEEDED(eventWait(&g_usbDualshock4Event, UINT64_MAX)))
-                {
-
-                    std::scoped_lock usbLock(usbMutex);
-                    if (!controllers::IsAtControllerLimit())
-                    {
-                        s32 total_entries;
-                        if ((QueryVendorProduct(VENDOR_SONY, config::globalConfig.dualshock4_productID) != 0)
-                        && (total_entries = QueryInterfaces(USB_CLASS_HID, 0, 0)) != 0)
-                            controllers::Insert(std::make_unique<Dualshock4Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries)));
-=======
                         if ((QueryVendorProduct(VENDOR_SONY, PRODUCT_DUALSHOCK3) != 0) && (total_entries = QueryInterfaces(USB_CLASS_HID, 0, 0)) != 0)
-                            WriteToLog("Initializing Dualshock 3 controller: 0x%x", controllers::Insert(std::make_unique<Dualshock3Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries))));
+                            controllers::Insert(std::make_unique<Dualshock3Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries)));
 
                         else if ((QueryVendorProduct(VENDOR_SONY, PRODUCT_DUALSHOCK4_1X) != 0 || QueryVendorProduct(VENDOR_SONY, PRODUCT_DUALSHOCK4_2X) != 0) && (total_entries = QueryInterfaces(USB_CLASS_HID, 0, 0)) != 0)
-                            WriteToLog("Initializing Dualshock 4 controller: 0x%x", controllers::Insert(std::make_unique<Dualshock4Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries))));
->>>>>>> 99520c55e6c435c7aa4b73e270577b6c6eff8445
+                            controllers::Insert(std::make_unique<Dualshock4Controller>(std::make_unique<SwitchUSBDevice>(interfaces, total_entries)));
                     }
                 }
             } while (is_usb_event_thread_running);

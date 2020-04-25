@@ -173,15 +173,9 @@ namespace syscon::config
 
         void ConfigChangedCheckThreadFunc(void *arg)
         {
-<<<<<<< HEAD
-            do {
-                if (R_SUCCEEDED(waitSingle(filecheckTimerWaiter, 0)))
-=======
-            WriteToLog("Starting config check thread!");
             do
             {
                 if (R_SUCCEEDED(waitSingle(filecheckTimerWaiter, UINT64_MAX)))
->>>>>>> 99520c55e6c435c7aa4b73e270577b6c6eff8445
                 {
                     if (config::CheckForFileChanges())
                     {
